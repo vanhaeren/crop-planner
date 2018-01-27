@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="row">
+    <div class="google-maps" id="map" style="height: 400px; position: relative; border: 1px solid #CCC;"></div>
+<p>
+    Length (red line): <span id="span-length">0</span> m - Area (grey area): <span id="span-area">0</span> m² - <a href="javascript:measureReset();">Reset Measure</a>
+</p>
+</div>
+{% endblock %}

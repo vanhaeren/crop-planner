@@ -1,0 +1,8 @@
+INSERT INTO crop(category_id,taxon,taxon_family,dose,spread,row_spacing) VALUES(6,"Coriandrum sativum L","Apiaceae",2,10,35);
+INSERT INTO crop(category_id,taxon,taxon_family,dose,spread,row_spacing) VALUES(4,"Carum carvi","Apiaceae",1,20,40);
+INSERT INTO crop(category_id,taxon,taxon_family,dose,spread,row_spacing) VALUES(3,"Ocimum basilicum L","Lamiaceae",0.3,25,30);
+INSERT INTO crop(category_id,taxon,taxon_family,dose,spread,row_spacing) VALUES(1,"Pimpinella anisum","Apiaceae",1.5,15,40);
+INSERT INTO crop(category_id,taxon,taxon_family,dose,spread,row_spacing) VALUES(2,"Anethum graveoloens","Apiaceae",1.5,8,25);
+INSERT INTO crop(category_id,taxon,taxon_family,dose,spread,row_spacing) VALUES(7,"Raphanus Sativus L","Brassicaceae",5.5,3,5);
+INSERT INTO crop(category_id,taxon,taxon_family,dose,spread,row_spacing) VALUES(8,"Capsicum annuum L","Solanaceae",0.4,45,75);
+INSERT INTO crop(category_id,taxon,taxon_family,dose,spread,row_spacing) VALUES(5,"Cucurbita maxima L","Cucurbitaceae",0.9,90,120);

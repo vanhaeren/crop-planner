@@ -1,0 +1,14 @@
+flask-script
+flask-restful
+flask-mongoengine
+mongoengine
+PyMySQL
+google-api-python-client
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+oauth2client
+requests
+sqlalchemy
+mysqlclient
+pymongo=2.7.1

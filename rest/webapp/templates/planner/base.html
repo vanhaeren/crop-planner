@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Planner{% endblock %}</title>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}">></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}">></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB6UfDqyizu9Ze6-5Wq2_KdvqOK9teZplY&libraries=geometry"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+</head>
+<body>
+<div class="container">
+    <p class="navbar-text navbar-right">
+        {% if session.profile %}
+        <a href="/logout">
+            {% if session.profile.image %}
+            <img class="img-circle" src="{{session.profile.image.url}}" width="24">
+            {% endif %}
+            {{session.profile.displayName}}
+        </a>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userSettings">
+            Settings
+        </button>
+    <div class="modal fade" id="userSettings">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">User Settings</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <form method="POST" action="{{ url_for('.settings') }}">
+                    {{ settingsform.csrf_token }}
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {{ settingsform.row_width.label }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ settingsform.row_width }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {{ settingsform.row_spacing.label }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ settingsform.row_spacing }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {{ settingsform.row_length.label }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ settingsform.row_length }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    {{ settingsform.language.label }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ settingsform.language }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        {{ settingsform.submit_save }}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <a href="/oauth2authorize">Login</a>
+    {% endif %}
+    </p>
+</div>
+<script src="{{ url_for('static', filename='js/google_maps.js') }}">></script>
+<div class="container">
+    <div class="jumbotron">
+        {% block body %}
+        {% endblock %}
+    </div>
+</div>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+</body>
+</html>

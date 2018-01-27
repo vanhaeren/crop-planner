@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% block body %}
+{% from "_formhelpers.html" import render_field %}
+<div class="row">
+    <div class="col-md-8">
+        <div id="map"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        Debug: <span id="jsdebug"></span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <h3>Defined fields:</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Field Name</th>
+                <th scope="col">Field Area (m2)</th>
+                <th scope="col">Areable Area (m2)</th>
+                <th scope="col">Number of beds</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for fieldformdetail in fieldformdetails %}
+            <tr data-toggle="modal" data-target="#row_modal_{{ fields[loop.index0].id }}">
+                <!-- Edit field modal starts here -->
+                <div class="modal fade" id="row_modal_{{ fields[loop.index0].id }}">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit field</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <form method="POST"
+                                  action="{{ url_for('.fielddetail', field_id = fields[loop.index0].id) }}">
+                                {{ fieldformdetail.csrf_token }}
+                                {{ fieldformdetail.fieldform.csrf_token }}
+                                {{ fieldformdetail.cropbedform.csrf_token }}
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <b>{{ fieldformdetail.fieldform.fieldname.label }}</b>
+                                            </div>
+                                            <div class="col-md-2">
+                                                {{ fieldformdetail.fieldform.fieldname }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <b>{{ fieldformdetail.fieldform.area.label }}</b>
+                                            </div>
+                                            <div class="col-md-2">
+                                                {{ fieldformdetail.fieldform.area }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ fieldformdetail.submit_update }}
+                                                {{ fieldformdetail.submit_delete }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <b>Bed number</b>
+                                            </div>
+                                            <b>{{ fieldformdetail.cropbedform.crop_type.label }}</b>
+                                            <div class="col">
+                                            </div>
+                                            <div class="col">
+                                                <b>{{ fieldformdetail.cropbedform.crops.label }}</b>
+                                            </div>
+                                            <div class="col">
+                                                <b>{{ fieldformdetail.cropbedform.crop_coverage.label }}</b>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col">
+                                                {{ fieldformdetail.bed_id }}
+                                            </div>
+                                            <div class="col">
+                                                {{ fieldformdetail.cropbedform.crop_type }}
+                                            </div>
+                                            <div class="col">
+                                                {{ fieldformdetail.cropbedform.crops }}
+                                            </div>
+                                            <div class="col">
+                                                {{ fieldformdetail.cropbedform.crop_coverage }}
+                                            </div>
+                                            {{ fieldformdetail.areable_area }}
+                                            {{ fieldformdetail.fieldform.coordinates }}
+                                            {{ fieldformdetail.fieldform.lengths }}
+                                            {{ fieldformdetail.field_id }}
+                                            {{ fieldformdetail.number_of_beds }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    {{ fieldformdetail.submit_addcrop }}
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Edit field modal ends here -->
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ fields[loop.index0].name }}</td>
+                <td>{{ fields[loop.index0].area }}</td>
+                <td>{{ fields[loop.index0].areable_area }}</td>
+                <td>{{ fields[loop.index0].number_of_beds }}</td>
+            </tr>
+            {% if fields[loop.index0].beds.all()|length > 0 %}
+            <tr>
+                <td></td>
+                <th>Bed ID</th>
+                <th>Crop Variety</th>
+                <th>Crop Coverage (%)</th>
+                <th>Cropping Type</th>
+            </tr>
+            {% endif %}
+            {% for cropbed in fields[loop.index0].beds %}
+            <tr data-toggle="modal" data-target="#bed_modal_{{ cropbed.id }}">
+                <!-- Edit bed modal starts here -->
+                <div class="modal fade" id="bed_modal_{{ cropbed.id }}">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit bed</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <form method="POST"
+                                  action="{{ url_for('.cropbeddetail', bed_id = cropbed.id) }}">
+                                {{ cropbedform.csrf_token }}
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col">
+                                                <b>{{ cropbedform.crop_type.label }}</b>
+                                            </div>
+                                            <div class="col">
+                                                <b>{{ cropbedform.crops.label }}</b>
+                                            </div>
+                                            <div class="col">
+                                                <b>{{ cropbedform.crop_coverage.label }}</b>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col">
+                                                {{ cropbedform.crop_type(selected=cropbed.cropping_type.value) }}
+                                            </div>
+                                            <div class="col">
+                                                {{ cropbedform.crops(selected=cropbed.crop_variety.variety) }}
+                                            </div>
+                                            <div class="col">
+                                                {{ cropbedform.crop_coverage(value=cropbed.crop_coverage) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    {{ cropbedform.submit_update }}
+                                    {{ cropbedform.submit_delete }}
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Edit cropbed modal ends here -->
+                <td></td>
+                <td>{{ cropbed.bed_id }}</td>
+                <td>{{ cropbed.crop_variety.variety }}</td>
+                <td>{{ cropbed.crop_coverage }}</td>
+                <td>{{ cropbed.cropping_type.value }}</td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<form method="POST" action="{{ url_for('.field') }}">
+    {{ addfieldform.fieldform.csrf_token }}
+    {{ addfieldform.csrf_token }}
+    <div class="row">
+        <div class="col-md-2">
+            {{ addfieldform.fieldform.fieldname.label }}
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                {{ addfieldform.fieldform.fieldname }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            {{ addfieldform.fieldform.area.label }}
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                {{ addfieldform.fieldform.area(id="new-area") }}{{
+                addfieldform.fieldform.coordinates(id="new-coordinates") }}{{
+                addfieldform.fieldform.lengths(id="new-lengths") }}
+            </div>
+        </div>
+        <div class="col-md-2">
+            {{ addfieldform.submit_add }}
+        </div>
+    </div>
+
+</form>
+<p>
+    {% endblock %}
